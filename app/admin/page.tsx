@@ -12,6 +12,8 @@ type CreatedProduct = {
   link: string;
 };
 
+type ResetAction = "resetOwnership" | "clearScans" | "resetAll";
+
 export default function AdminPage() {
   const [password, setPassword] = useState("");
   const [name, setName] = useState("Penguins Hoodie Black Edition");
@@ -22,6 +24,10 @@ export default function AdminPage() {
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
   const [created, setCreated] = useState<CreatedProduct | null>(null);
+
+  const [resetSerial, setResetSerial] = useState("PGN-000001");
+  const [resetLoading, setResetLoading] = useState<ResetAction | null>(null);
+  const [resetMessage, setResetMessage] = useState("");
 
   async function createProduct(e: React.FormEvent) {
     e.preventDefault();
@@ -64,6 +70,34 @@ export default function AdminPage() {
     setLoading(false);
   }
 
+  async function resetProduct(action: ResetAction) {
+    setResetLoading(action);
+    setResetMessage("");
+
+    const response = await fetch("/api/admin/reset-product", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        password,
+        serial: resetSerial,
+        action,
+      }),
+    });
+
+    const result = await response.json();
+
+    if (!response.ok) {
+      setResetMessage(result.error || "Reset failed");
+      setResetLoading(null);
+      return;
+    }
+
+    setResetMessage(result.message || "Done");
+    setResetLoading(null);
+  }
+
   return (
     <main className="min-h-screen bg-black text-white p-6">
       <div className="w-full max-w-md mx-auto pt-10 pb-10">
@@ -77,7 +111,7 @@ export default function AdminPage() {
 
         <form
           onSubmit={createProduct}
-          className="bg-zinc-950 rounded-3xl p-6 border border-zinc-800 space-y-4"
+          className="bg-zinc-950 rounded-3xl p-6 border border-zinc-800 space-y-4 mb-6"
         >
           <div>
             <label className="text-sm text-zinc-500">Admin password</label>
@@ -143,13 +177,11 @@ export default function AdminPage() {
             {loading ? "Creating..." : "Create Product"}
           </button>
 
-          {message && (
-            <p className="text-zinc-400 text-sm">{message}</p>
-          )}
+          {message && <p className="text-zinc-400 text-sm">{message}</p>}
         </form>
 
         {created && (
-          <div className="bg-zinc-950 rounded-3xl p-6 border border-zinc-800 mt-6">
+          <div className="bg-zinc-950 rounded-3xl p-6 border border-zinc-800 mb-6">
             <h2 className="text-xl font-semibold mb-4">Product created</h2>
 
             <div className="space-y-2 text-sm">
@@ -169,6 +201,13 @@ export default function AdminPage() {
               <p className="break-all text-sm">{created.link}</p>
             </div>
 
+            <button
+              onClick={() => navigator.clipboard.writeText(created.link)}
+              className="w-full mt-4 bg-zinc-800 rounded-2xl py-3 font-semibold"
+            >
+              Copy NFC Link
+            </button>
+
             <a
               href={created.link}
               target="_blank"
@@ -178,6 +217,56 @@ export default function AdminPage() {
             </a>
           </div>
         )}
+
+        <div className="bg-zinc-950 rounded-3xl p-6 border border-zinc-800">
+          <h2 className="text-xl font-semibold mb-3">Demo reset</h2>
+
+          <p className="text-zinc-400 text-sm mb-4">
+            Reset ownership and scans before showing the demo again.
+          </p>
+
+          <div className="mb-4">
+            <label className="text-sm text-zinc-500">Product serial</label>
+            <input
+              value={resetSerial}
+              onChange={(e) => setResetSerial(e.target.value)}
+              className="w-full mt-1 bg-zinc-900 border border-zinc-800 rounded-2xl px-4 py-3 text-white outline-none"
+              placeholder="PGN-000001"
+            />
+          </div>
+
+          <div className="space-y-3">
+            <button
+              onClick={() => resetProduct("resetOwnership")}
+              disabled={resetLoading !== null || password.length === 0}
+              className="w-full bg-zinc-800 rounded-2xl py-3 font-semibold disabled:opacity-40"
+            >
+              {resetLoading === "resetOwnership"
+                ? "Resetting..."
+                : "Reset ownership"}
+            </button>
+
+            <button
+              onClick={() => resetProduct("clearScans")}
+              disabled={resetLoading !== null || password.length === 0}
+              className="w-full bg-zinc-800 rounded-2xl py-3 font-semibold disabled:opacity-40"
+            >
+              {resetLoading === "clearScans" ? "Clearing..." : "Clear scans"}
+            </button>
+
+            <button
+              onClick={() => resetProduct("resetAll")}
+              disabled={resetLoading !== null || password.length === 0}
+              className="w-full bg-white text-black rounded-2xl py-3 font-semibold disabled:opacity-40"
+            >
+              {resetLoading === "resetAll" ? "Resetting..." : "Reset full demo"}
+            </button>
+          </div>
+
+          {resetMessage && (
+            <p className="text-zinc-400 text-sm mt-4">{resetMessage}</p>
+          )}
+        </div>
       </div>
     </main>
   );
