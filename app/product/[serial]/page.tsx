@@ -1,6 +1,27 @@
 import { supabase } from "@/lib/supabase";
 import ScanLogger from "./ScanLogger";
 
+function formatDevice(device: string | null) {
+  if (!device) return "Unknown device";
+
+  const value = device.toLowerCase();
+
+  if (value.includes("iphone")) return "iPhone";
+  if (value.includes("ipad")) return "iPad";
+  if (value.includes("android")) return "Android";
+  if (value.includes("windows")) return "Windows PC";
+  if (value.includes("macintosh")) return "Mac";
+
+  return "Device";
+}
+
+function formatLocation(city: string | null, country: string | null) {
+  if (city && country) return `${city}, ${country}`;
+  if (country) return country;
+  if (city) return city;
+  return "Unknown location";
+}
+
 export default async function ProductPage({
   params,
 }: {
@@ -34,12 +55,13 @@ export default async function ProductPage({
 
   const scanCount = scans?.length || 0;
   const lastScan = scans?.[0];
+  const recentScans = scans?.slice(0, 5) || [];
 
   return (
     <main className="min-h-screen bg-black text-white p-6">
       <ScanLogger serial={serial} />
 
-      <div className="w-full max-w-md mx-auto pt-10">
+      <div className="w-full max-w-md mx-auto pt-10 pb-10">
         <div className="text-center mb-8">
           <div className="text-5xl mb-3">🐧</div>
           <h1 className="text-5xl font-bold tracking-widest mb-2">PENGUINS</h1>
@@ -81,6 +103,43 @@ export default async function ProductPage({
             <div className="text-sm text-zinc-400">
               Last scan:{" "}
               {new Date(lastScan.scanned_at).toLocaleString("it-IT")}
+            </div>
+          )}
+        </div>
+
+        <div className="bg-zinc-950 rounded-3xl p-6 border border-zinc-800 mb-6">
+          <h2 className="text-xl font-semibold mb-4">Recent Verifications</h2>
+
+          {recentScans.length === 0 ? (
+            <p className="text-zinc-500 text-sm">No scans yet.</p>
+          ) : (
+            <div className="space-y-3">
+              {recentScans.map((scan) => (
+                <div
+                  key={scan.id}
+                  className="bg-zinc-900 rounded-2xl p-4 border border-zinc-800"
+                >
+                  <div className="flex items-center justify-between gap-3">
+                    <div>
+                      <p className="font-semibold">
+                        {formatLocation(scan.city, scan.country)}
+                      </p>
+                      <p className="text-zinc-500 text-sm">
+                        {formatDevice(scan.device)}
+                      </p>
+                    </div>
+
+                    <div className="text-right text-xs text-zinc-500">
+                      {new Date(scan.scanned_at).toLocaleString("it-IT", {
+                        day: "2-digit",
+                        month: "2-digit",
+                        hour: "2-digit",
+                        minute: "2-digit",
+                      })}
+                    </div>
+                  </div>
+                </div>
+              ))}
             </div>
           )}
         </div>
