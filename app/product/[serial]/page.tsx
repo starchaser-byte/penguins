@@ -1,6 +1,7 @@
 import { supabase } from "@/lib/supabase";
 import ScanLogger from "./ScanLogger";
 import ClaimProduct from "./ClaimProduct";
+import VerifiedBadge from "./VerifiedBadge";
 
 function formatDevice(device: string | null) {
   if (!device) return "Unknown device";
@@ -70,9 +71,7 @@ export default async function ProductPage({
         </div>
 
         <div className="bg-zinc-900 rounded-3xl p-8 shadow-xl border border-zinc-800 mb-6">
-          <div className="text-green-400 text-3xl mb-6 text-center">
-            ✔ Product Authentic
-          </div>
+          <VerifiedBadge />
 
           <div className="text-left space-y-3">
             <p>
