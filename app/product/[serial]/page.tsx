@@ -1,5 +1,6 @@
 import { supabase } from "@/lib/supabase";
 import ScanLogger from "./ScanLogger";
+import ClaimProduct from "./ClaimProduct";
 
 function formatDevice(device: string | null) {
   if (!device) return "Unknown device";
@@ -74,13 +75,27 @@ export default async function ProductPage({
           </div>
 
           <div className="text-left space-y-3">
-            <p><b>Product:</b> {product.name}</p>
-            <p><b>Serial:</b> {product.serial}</p>
-            <p><b>Batch:</b> {product.batch}</p>
-            <p><b>Made in:</b> {product.made_in}</p>
-            <p><b>Status:</b> {product.status}</p>
-            <p><b>Material:</b> {product.material}</p>
-            <p><b>Collection:</b> {product.collection}</p>
+            <p>
+              <b>Product:</b> {product.name}
+            </p>
+            <p>
+              <b>Serial:</b> {product.serial}
+            </p>
+            <p>
+              <b>Batch:</b> {product.batch}
+            </p>
+            <p>
+              <b>Made in:</b> {product.made_in}
+            </p>
+            <p>
+              <b>Status:</b> {product.status}
+            </p>
+            <p>
+              <b>Material:</b> {product.material}
+            </p>
+            <p>
+              <b>Collection:</b> {product.collection}
+            </p>
           </div>
         </div>
 
@@ -106,6 +121,12 @@ export default async function ProductPage({
             </div>
           )}
         </div>
+
+        <ClaimProduct
+          serial={serial}
+          ownerName={product.owner_name}
+          ownerRegisteredAt={product.owner_registered_at}
+        />
 
         <div className="bg-zinc-950 rounded-3xl p-6 border border-zinc-800 mb-6">
           <h2 className="text-xl font-semibold mb-4">Recent Verifications</h2>
@@ -173,6 +194,23 @@ export default async function ProductPage({
                   <p className="font-semibold">Latest verification</p>
                   <p className="text-zinc-500">
                     {new Date(lastScan.scanned_at).toLocaleString("it-IT")}
+                  </p>
+                </div>
+              </div>
+            )}
+
+            {product.owner_name && (
+              <div className="flex gap-3">
+                <span className="text-green-400">●</span>
+                <div>
+                  <p className="font-semibold">Ownership registered</p>
+                  <p className="text-zinc-500">
+                    {product.owner_name}
+                    {product.owner_registered_at
+                      ? ` · ${new Date(
+                          product.owner_registered_at
+                        ).toLocaleString("it-IT")}`
+                      : ""}
                   </p>
                 </div>
               </div>
