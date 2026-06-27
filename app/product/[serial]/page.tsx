@@ -2,7 +2,7 @@ import { supabase } from "@/lib/supabase";
 import ScanLogger from "./ScanLogger";
 import ClaimProduct from "./ClaimProduct";
 import VerifiedBadge from "./VerifiedBadge";
-
+import Image from "next/image";
 function formatDevice(device: string | null) {
   if (!device) return "Unknown device";
 
@@ -76,8 +76,15 @@ export default async function ProductPage({
             </span>
           </div>
 
-          <div className="text-6xl mb-4">🐧</div>
-
+<div className="flex justify-center mb-4">
+  <Image
+    src="/pixie.png"
+    alt="Penguins logo"
+    width={96}
+    height={96}
+    className="rounded-2xl"
+  />
+</div>
           <h1 className="text-5xl font-black tracking-[0.22em] mb-3">
             PENGUINS
           </h1>
@@ -110,7 +117,15 @@ export default async function ProductPage({
               </div>
 
               <div className="text-center py-8">
-                <div className="text-8xl mb-5">🐧</div>
+<div className="flex justify-center mb-5">
+  <Image
+    src="/pixie.png"
+    alt="Penguins logo"
+    width={150}
+    height={150}
+    className="rounded-3xl"
+  />
+</div>
                 <p className="text-2xl font-bold tracking-widest">
                   PENGUINS
                 </p>
