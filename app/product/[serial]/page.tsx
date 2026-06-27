@@ -120,10 +120,10 @@ export default async function ProductPage({
 <div className="flex justify-center mb-5">
   <Image
     src="/pixie.png"
-    alt="Penguins logo"
-    width={150}
-    height={150}
-    className="rounded-3xl"
+    alt="Pixie Penguins"
+    width={160}
+    height={160}
+    className="object-contain"
   />
 </div>
                 <p className="text-2xl font-bold tracking-widest">
