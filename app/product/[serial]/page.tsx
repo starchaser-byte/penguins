@@ -115,7 +115,7 @@ export default async function ProductPage({
                   PENGUINS
                 </p>
                 <p className="text-zinc-500 text-sm mt-2">
-                  Black Edition Passport
+                    Digital Product Passport
                 </p>
               </div>
             </div>
@@ -259,7 +259,7 @@ export default async function ProductPage({
         </div>
 
         <p className="text-center text-zinc-700 text-xs mt-8">
-          Penguins Digital Passport · NFC Experience Demo
+          Penguins Digital Passport
         </p>
       </div>
     </main>

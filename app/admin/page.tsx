@@ -16,7 +16,7 @@ type ResetAction = "resetOwnership" | "clearScans" | "resetAll";
 
 export default function AdminPage() {
   const [password, setPassword] = useState("");
-  const [name, setName] = useState("Penguins Hoodie Black Edition");
+  const [name, setName] = useState("Penguins Hoodie");
   const [batch, setBatch] = useState("B24-05");
   const [madeIn, setMadeIn] = useState("Italy");
   const [material, setMaterial] = useState("Cotton / Polyester");
