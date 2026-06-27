@@ -76,13 +76,14 @@ export default async function ProductPage({
             </span>
           </div>
 
-<div className="flex justify-center mb-4">
+<div className="flex justify-center mb-5">
   <Image
     src="/peng.png"
     alt="Penguins logo"
-    width={220}
-    height={220}
-    className="object-contain"
+    width={125}
+    height={125}
+    className="object-contain opacity-95"
+    priority
   />
 </div>
           <h1 className="text-5xl font-black tracking-[0.22em] mb-3">
