@@ -80,9 +80,9 @@ export default async function ProductPage({
   <Image
     src="/peng.png"
     alt="Penguins logo"
-    width={320}
-    height={189}
-    className="rounded-2xl"
+    width={220}
+    height={220}
+    className="object-contain"
   />
 </div>
           <h1 className="text-5xl font-black tracking-[0.22em] mb-3">
