@@ -78,7 +78,7 @@ export default async function ProductPage({
 
 <div className="flex justify-center mb-4">
   <Image
-    src="/pixie.png"
+    src="/peng.png"
     alt="Penguins logo"
     width={96}
     height={96}
